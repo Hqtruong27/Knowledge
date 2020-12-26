@@ -1,11 +1,8 @@
 ﻿using Knowledge.Backend.Data.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Knowledge.Backend.Data.Models
 {
@@ -43,7 +40,8 @@ namespace Knowledge.Backend.Data.Models
         public string ErrorMessage { get; set; }
 
         [MaxLength(500)]
-        public string Workaround { get; set; }[Description("Cach giai quyet")]
+        public string Workaround { get; set; }
+        [Description("Cach giai quyet")]
 
         public string Note { get; set; }
         [Required]

@@ -1,5 +1,3 @@
-using System;
-
 namespace Knowledge.Portal.Models
 {
     public class ErrorViewModel
