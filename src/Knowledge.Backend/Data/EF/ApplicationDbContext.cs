@@ -3,7 +3,7 @@ using Knowledge.Backend.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Knowledge.Backend.Data
+namespace Knowledge.Backend.Data.EF
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
@@ -27,8 +27,8 @@ namespace Knowledge.Backend.Data
         public DbSet<Function> Functions { get; set; }
         public DbSet<KnowledgeBase> KnowledgeBases { get; set; }
         public DbSet<Label> Labels { get; set; }
-        public DbSet<LabelInKnowedgeBase> LabelInKnowedgeBases { get; set; }
-        public DbSet<Permission> Permission { get; set; }
+        public DbSet<LabelInKnowledgeBase> LabelInKnowedgeBases { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
         public DbSet<Report> Reports { get; set; }
         public DbSet<Vote> Votes { get; set; }
     }

@@ -10,19 +10,22 @@ namespace Knowledge.Backend.Data.Configurations
         {
             builder.Entity<IdentityRole>()
                   .Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
-
             builder.Entity<User>()
                    .Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
 
-            builder.Entity<LabelInKnowedgeBase>()
-                   .Property(x => new { x.LabelId, x.KnowledgeBaseId });
-
+            //Permission
+            builder.Entity<Permission>()
+                       .HasKey(x => new { x.RoleId, x.FunctionId, x.CommandId });
+            //Label In Knowledge Base
+            builder.Entity<LabelInKnowledgeBase>()
+                   .HasKey(x => new { x.LabelId, x.KnowledgeBaseId });
+            //Vote
             builder.Entity<Vote>()
-                   .Property(x => new { x.KnowledgeBaseId, x.UserId });
-
+                   .HasKey(x => new { x.KnowledgeBaseId, x.UserId });
+            //Command In Function
             builder.Entity<CommandInFunction>()
-                   .Property(x => new { x.CommandId, x.FunctionId });
-
+                   .HasKey(x => new { x.CommandId, x.FunctionId });
+            //Sequence
             builder.HasSequence("KnowledgeBaseSequence");
         }
     }

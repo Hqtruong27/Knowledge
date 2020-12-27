@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Knowledge.Backend.Data.Models
 {
-    public class LabelInKnowedgeBase
+    public class LabelInKnowledgeBase
     {
         public int KnowledgeBaseId { get; set; }
 
