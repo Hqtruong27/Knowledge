@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Knowledge.Data": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
