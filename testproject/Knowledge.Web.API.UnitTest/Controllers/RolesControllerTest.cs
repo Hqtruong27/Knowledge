@@ -10,6 +10,7 @@ using Knowledge.Web.API.Controllers;
 using Knowledge.Data.UOW;
 using Knowledge.Services.ViewModels;
 using AutoMapper;
+using MockQueryable.Moq;
 
 namespace Knowledge.Web.API.UnitTest.Controllers
 {
@@ -18,6 +19,13 @@ namespace Knowledge.Web.API.UnitTest.Controllers
         private readonly Mock<RoleManager<IdentityRole>> _mockRoleManager;
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly Mock<IMapper> _mockMapper;
+        private readonly List<IdentityRole> _roles = new List<IdentityRole> {
+                new IdentityRole{Id = "admin",Name = "admin" },
+                new IdentityRole{Id = "Manager",Name = "Manager" },
+                new IdentityRole{Id = "CEO",Name = "CEO" },
+                new IdentityRole{Id = "Employee",Name = "Employee" }
+            };
+        #region 1: Ctor
         public RolesControllerTest()
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -31,14 +39,14 @@ namespace Knowledge.Web.API.UnitTest.Controllers
             var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object, _mockMapper.Object);
             Assert.NotNull(rolesController);
         }
+        #endregion Ctor
+
+        #region 2: GetAll
         [Fact]
         public async Task GetAll_HasData_Success()
         {
             var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object, _mockMapper.Object);
-            _mockUnitOfWork.Setup(x => x.RoleRepository.GetAll()).ReturnsAsync(new List<IdentityRole> {
-                new IdentityRole{Id = "admin",Name = "admin" },
-                new IdentityRole{Id = "user",Name = "user" }
-            }.AsEnumerable());
+            _mockUnitOfWork.Setup(x => x.RoleRepository.GetAll()).ReturnsAsync(_roles.AsQueryable().BuildMock().Object);
 
             var result = await rolesController.GetAllAsync();
             var okResult = (OkObjectResult)result;
@@ -52,7 +60,45 @@ namespace Knowledge.Web.API.UnitTest.Controllers
             _mockRoleManager.Setup(x => x.Roles).Throws(new Exception());
             await Assert.ThrowsAnyAsync<Exception>(async () => await rolesController.GetAllAsync());
         }
+        #endregion GetAll
 
+        #region 3: Get Pagination
+        [Fact]
+        public async Task GetPaging_NoFilter_HasData()
+        {
+            var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object, _mockMapper.Object);
+            _mockUnitOfWork.Setup(x => x.RoleRepository.GetAll()).ReturnsAsync(_roles.AsQueryable().BuildMock().Object);
+
+            var result = await rolesController.GetPagination(null, 1, 2);
+            var okResult = (OkObjectResult)result;
+            var paging = okResult.Value as Pagination<RoleViewModel>;
+
+            Assert.Equal(4, paging.TotalRecords);
+            Assert.Single(paging.Items);
+        }
+
+        [Fact]
+        public async Task GetPaging_HasFilter_HasData()
+        {
+            var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object, _mockMapper.Object);
+            _mockUnitOfWork.Setup(x => x.RoleRepository.GetAll()).ReturnsAsync(_roles.AsQueryable().BuildMock().Object);
+
+            var result = await rolesController.GetPagination("admin", 1, 2);
+            var okResult = (OkObjectResult)result;
+            var paging = okResult.Value as Pagination<RoleViewModel>;
+
+            Assert.Equal(1, paging.TotalRecords);
+            Assert.Single(paging.Items);
+        }
+
+        //[Fact]
+        //public async Task GetPaging_Nofilter_Failed()
+        //{
+        //    var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object, _mockMapper.Object);
+        //    _mockRoleManager.Setup(x => x.Roles).Throws(new Exception());
+        //    await Assert.ThrowsAnyAsync<Exception>(async () => await rolesController.GetAllAsync());
+        //}
+        #endregion Get Pagination
         [Fact]
         public async Task CreateAsync_ValidInput_Succeeded()
         {

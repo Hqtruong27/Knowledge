@@ -1,10 +1,12 @@
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Knowledge.Common.Resources;
 using Knowledge.Core.Mapper;
 using Knowledge.Data.EF;
 using Knowledge.Data.EF.Seed;
 using Knowledge.Data.Models;
 using Knowledge.Data.Repositories.RegisterDI;
+using Knowledge.Services.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -62,7 +64,7 @@ namespace Knowledge.Web.API
                 options.User.RequireUniqueEmail = false;
             });
 
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RoleViewModelValidator>()); ;
             services.AddAutoMapper(typeof(MapperProfiles).Assembly);
             services.AddTransient<DatabaseInitializer>();
 

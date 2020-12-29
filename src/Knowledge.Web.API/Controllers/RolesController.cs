@@ -34,18 +34,16 @@ namespace Knowledge.Web.API.Controllers
 
         //URl: GET: http://localhost:5001/api/roles?q={q}&offset=2&limit=10
         [HttpGet("pagination")]
-        public async Task<IActionResult> GetRolesPagination(string q, int offset, int limit)
+        public async Task<IActionResult> GetPagination(string q, int offset, int limit)
         {
-            var strQ = _roleManager.Roles;
+            var strQ = await _unitOfWork.RoleRepository.GetAll();
             if (!string.IsNullOrEmpty(q))
             {
                 strQ = strQ.Where(x => x.Id.Contains(q) || x.Name.Contains(q));
             }
             var totalRecords = await strQ.CountAsync();
-            var items = await strQ.Skip(offset - (1 * limit))
-                                  .Take(limit)
-                                  .Select(x => new RoleViewModel() { Id = x.Id, Name = x.Name })
-                                  .ToListAsync();
+            var items = await strQ.Skip((offset - 1) * limit).Take(offset)
+                                  .Select(x => _mapper.Map<RoleViewModel>(x)).ToListAsync();
             var pagination = new Pagination<RoleViewModel>() { Items = items, TotalRecords = totalRecords };
             return Ok(pagination);
         }
@@ -92,7 +90,7 @@ namespace Knowledge.Web.API.Controllers
             var result = await _roleManager.DeleteAsync(role);
             if (!result.Succeeded) return BadRequest(result.Errors);
 
-            return Ok(new RoleViewModel() { Id = role.Id, Name = role.Name });
+            return Ok(_mapper.Map<RoleViewModel>(role));
         }
     }
 }
