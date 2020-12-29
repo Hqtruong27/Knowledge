@@ -1,5 +1,6 @@
-﻿using Knowledge.Data.UOW;
-using Knowledge.ViewModels.Systems;
+﻿using AutoMapper;
+using Knowledge.Data.UOW;
+using Knowledge.Services.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,12 @@ namespace Knowledge.Web.API.Controllers
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUnitOfWork _unitOfWork;
-        public RolesController(RoleManager<IdentityRole> roleManager, IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        public RolesController(RoleManager<IdentityRole> roleManager, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _roleManager = roleManager;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         //URl: GET: http://localhost:5001/api/roles
@@ -25,12 +28,12 @@ namespace Knowledge.Web.API.Controllers
         public async Task<IActionResult> GetAllAsync()
         {
             var result = await _unitOfWork.RoleRepository.GetAll();
-            var roles = result.Select(x => new RoleViewModel { Id = x.Id, Name = x.Name });
+            var roles = result.Select(x => _mapper.Map<RoleViewModel>(x));
             return Ok(roles);
         }
 
         //URl: GET: http://localhost:5001/api/roles?q={q}&offset=2&limit=10
-        [HttpGet]
+        [HttpGet("pagination")]
         public async Task<IActionResult> GetRolesPagination(string q, int offset, int limit)
         {
             var strQ = _roleManager.Roles;

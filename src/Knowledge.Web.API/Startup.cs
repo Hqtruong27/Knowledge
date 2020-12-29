@@ -1,4 +1,6 @@
+using AutoMapper;
 using Knowledge.Common.Resources;
+using Knowledge.Core.Mapper;
 using Knowledge.Data.EF;
 using Knowledge.Data.EF.Seed;
 using Knowledge.Data.Models;
@@ -61,11 +63,12 @@ namespace Knowledge.Web.API
             });
 
             services.AddControllers();
+            services.AddAutoMapper(typeof(MapperProfiles).Assembly);
             services.AddTransient<DatabaseInitializer>();
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Knowledge.Backend", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Knowledge.Web.API", Version = "v1" });
             });
         }
 
