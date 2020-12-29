@@ -14,12 +14,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Knowledge.Common\Knowledge.Common.csproj" />
+    <ProjectReference Include="..\Knowledge.Core\Knowledge.Core.csproj" />
     <ProjectReference Include="..\Knowledge.Data\Knowledge.Data.csproj" />
+    <ProjectReference Include="..\Knowledge.Services\Knowledge.Services.csproj" />
     <ProjectReference Include="..\Knowledge.ViewModels\Knowledge.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Common\" />
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>

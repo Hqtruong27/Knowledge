@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Knowledge.ViewModels.Systems
+namespace Knowledge.Services.ViewModels
 {
     public class RoleViewModel
     {
