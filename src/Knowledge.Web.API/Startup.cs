@@ -7,6 +7,7 @@ using Knowledge.Data.EF.Seed;
 using Knowledge.Data.Models;
 using Knowledge.Data.Repositories.RegisterDI;
 using Knowledge.Services.Validation;
+using Knowledge.Web.API.IdentityServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -31,12 +32,13 @@ namespace Knowledge.Web.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //1. Setup entity framework
+            //1. Setup Db
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString(Constants.DbContext));
             }, ServiceLifetime.Scoped, ServiceLifetime.Singleton);
             services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RoleViewModelValidator>());
+            services.AddRazorPages();
 
             //2. Setup identity
             services.AddIdentity<User, IdentityRole>()
@@ -46,10 +48,22 @@ namespace Knowledge.Web.API
             //3. Resgiter DI Repository
             services.AddRepository();
             services.AddTransient<DatabaseInitializer>();
-            //Auto Mapper
+            //4. Auto Mapper
             services.AddAutoMapper(typeof(MapperProfiles).Assembly);
+            //5. Config Identity Server
+            var builder = services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+            })
+            .AddInMemoryIdentityResources(IdsConfiguration.Ids)
+            .AddInMemoryApiResources(IdsConfiguration.Apis)
+            .AddInMemoryClients(IdsConfiguration.Clients)
+            .AddAspNetIdentity<User>();
 
-            //4.config Identity options
+            //6. Config Identity options
             services.Configure<IdentityOptions>(options =>
             {
                 //Default Lockout settings.
@@ -69,7 +83,7 @@ namespace Knowledge.Web.API
                 options.User.AllowedUserNameCharacters = Constants.CharactersUser;
                 options.User.RequireUniqueEmail = false;
             });
-
+           
             //Swagger            
             services.AddSwaggerGen(c =>
             {
@@ -83,19 +97,27 @@ namespace Knowledge.Web.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Knowledge.Api v1"));
+                //app.UseSwagger();
+                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Knowledge.Api v1"));
             }
-
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
+            app.UseIdentityServer();
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
