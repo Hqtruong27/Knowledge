@@ -6,9 +6,15 @@
 TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
 
 ## Technology Stack 
+<<<<<<< HEAD
+1. .NET Core 5
+2. Angular 2+ (8)
+3. IdentityServer4
+=======
 1. .NET5 v5.0.1
 2. Angular 8
 3. IdentityServer 4
+>>>>>>> main
 4. SQL server 2017
 5. Docker
 6. ..

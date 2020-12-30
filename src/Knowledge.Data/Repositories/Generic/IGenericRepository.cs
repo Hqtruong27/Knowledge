@@ -1,16 +1,13 @@
 ﻿using Knowledge.Data.EF;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Knowledge.Data.Repositories.Generic
 {
     public interface IGenericRepository<T> where T : class
     {
-        Task<IEnumerable<T>> GetAll();
+        Task<IQueryable<T>> GetAll();
         Task<T> Get(string id);
         Task Add(T entity);
         Task Update(T entity);
@@ -25,9 +22,10 @@ namespace Knowledge.Data.Repositories.Generic
             _context = context;
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IQueryable<T>> GetAll()
         {
-            return await _context.Set<T>().ToListAsync();
+            var query = _context.Set<T>().AsQueryable().AsNoTracking();
+            return await Task.FromResult(query);
         }
 
         public async Task<T> Get(string id)
