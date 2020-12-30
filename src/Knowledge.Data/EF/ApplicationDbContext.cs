@@ -15,7 +15,7 @@ namespace Knowledge.Data.EF
         {
             base.OnModelCreating(builder);
 
-            builder.ConfigurationFluentApi();
+            builder.ConfigurationModels();
         }
 
         public DbSet<ActivityLog> ActivityLogs { get; set; }

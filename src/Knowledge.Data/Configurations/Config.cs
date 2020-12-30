@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Knowledge.Data.Configurations
 {
-    public static class FluentApi
+    public static class Config
     {
-        public static void ConfigurationFluentApi(this ModelBuilder builder)
+        public static void ConfigurationModels(this ModelBuilder builder)
         {
             builder.Entity<IdentityRole>()
                   .Property(x => x.Id).HasMaxLength(50).IsUnicode(false);

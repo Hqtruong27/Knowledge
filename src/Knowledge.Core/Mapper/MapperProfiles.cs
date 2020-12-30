@@ -8,7 +8,9 @@ namespace Knowledge.Core.Mapper
     {
         public MapperProfiles()
         {
-            CreateMap<RoleViewModel, IdentityRole>();
+            CreateMap<RoleViewModel, IdentityRole>()
+                .ForMember(i => i.NormalizedName, r => r.MapFrom(x => x.Name.ToUpper()));
+
             CreateMap<IdentityRole, RoleViewModel>();
         }
     }

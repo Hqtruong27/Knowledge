@@ -33,19 +33,26 @@ namespace Knowledge.Web.API
         {
             //1. Setup entity framework
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString(Constants.KnowledgeDbContext)));
+            {
+                options.UseSqlServer(Configuration.GetConnectionString(Constants.DbContext));
+            }, ServiceLifetime.Scoped, ServiceLifetime.Singleton);
+            services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RoleViewModelValidator>());
 
             //2. Setup identity
             services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-            //3. Resgiter DI
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddDefaultTokenProviders();
+
+            //3. Resgiter DI Repository
             services.AddRepository();
+            services.AddTransient<DatabaseInitializer>();
+            //Auto Mapper
+            services.AddAutoMapper(typeof(MapperProfiles).Assembly);
 
             //4.config Identity options
             services.Configure<IdentityOptions>(options =>
             {
-                // Default Lockout settings.
+                //Default Lockout settings.
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
@@ -58,16 +65,13 @@ namespace Knowledge.Web.API
                 options.Password.RequireUppercase = true;
                 options.User.RequireUniqueEmail = true;
 
-                // User settings.
+                // User Settings.
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
 
-            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RoleViewModelValidator>()); ;
-            services.AddAutoMapper(typeof(MapperProfiles).Assembly);
-            services.AddTransient<DatabaseInitializer>();
-
+            //Swagger            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Knowledge.Web.API", Version = "v1" });
@@ -81,7 +85,7 @@ namespace Knowledge.Web.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Knowledge.Backend v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Knowledge.Api v1"));
             }
 
             app.UseHttpsRedirection();

@@ -19,7 +19,7 @@ namespace Knowledge.Data.EF
                                     .AddJsonFile($"appsettings.{env}.json", optional: true)
                                     .Build();
             var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            builder.UseSqlServer(configuration.GetConnectionString(Constants.KnowledgeDbContext));
+            builder.UseSqlServer(configuration.GetConnectionString(Constants.DbContext));
             return new ApplicationDbContext(builder.Options);
         }
     }
