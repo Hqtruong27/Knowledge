@@ -1,6 +1,7 @@
 ﻿using Moq;
 using System;
 using System.Collections.Generic;
+<<<<<<< HEAD
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Xunit;
@@ -11,6 +12,18 @@ using Knowledge.Data.UOW;
 using Knowledge.Services.ViewModels;
 using AutoMapper;
 using MockQueryable.Moq;
+=======
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Xunit;
+using Knowledge.ViewModels.Systems;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using Knowledge.Web.API.UnitTest.Extensions;
+using Knowledge.Web.API.Controllers;
+using Knowledge.Data.UOW;
+>>>>>>> main
 
 namespace Knowledge.Web.API.UnitTest.Controllers
 {
@@ -18,6 +31,7 @@ namespace Knowledge.Web.API.UnitTest.Controllers
     {
         private readonly Mock<RoleManager<IdentityRole>> _mockRoleManager;
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
+<<<<<<< HEAD
         private readonly Mock<IMapper> _mockMapper;
         private readonly List<IdentityRole> _roles = new List<IdentityRole> {
                 new IdentityRole{Id = "admin",Name = "admin" },
@@ -30,12 +44,18 @@ namespace Knowledge.Web.API.UnitTest.Controllers
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
             _mockMapper = new Mock<IMapper>();
+=======
+        public RolesControllerTest()
+        {
+            _mockUnitOfWork = new Mock<IUnitOfWork>();
+>>>>>>> main
             var roleStore = new Mock<IRoleStore<IdentityRole>>();
             _mockRoleManager = new Mock<RoleManager<IdentityRole>>(roleStore.Object, null, null, null, null);
         }
         [Fact]
         public void CreateInstance_Notnull()
         {
+<<<<<<< HEAD
             var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object, _mockMapper.Object);
             Assert.NotNull(rolesController);
         }
@@ -47,6 +67,19 @@ namespace Knowledge.Web.API.UnitTest.Controllers
         {
             var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object, _mockMapper.Object);
             _mockUnitOfWork.Setup(x => x.RoleRepository.GetAll()).ReturnsAsync(_roles.AsQueryable().BuildMock().Object);
+=======
+            var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object);
+            Assert.NotNull(rolesController);
+        }
+        [Fact]
+        public async Task GetAll_HasData_Success()
+        {
+            var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object);
+            _mockUnitOfWork.Setup(x => x.RoleRepository.GetAll()).ReturnsAsync(new List<IdentityRole> {
+                new IdentityRole{Id = "admin",Name = "admin" },
+                new IdentityRole{Id = "user",Name = "user" }
+            }.AsEnumerable());
+>>>>>>> main
 
             var result = await rolesController.GetAllAsync();
             var okResult = (OkObjectResult)result;
@@ -56,6 +89,7 @@ namespace Knowledge.Web.API.UnitTest.Controllers
         [Fact]
         public async Task GetAll_Hasdata_Failed()
         {
+<<<<<<< HEAD
             var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object, _mockMapper.Object);
             _mockRoleManager.Setup(x => x.Roles).Throws(new Exception());
             await Assert.ThrowsAnyAsync<Exception>(async () => await rolesController.GetAllAsync());
@@ -103,6 +137,17 @@ namespace Knowledge.Web.API.UnitTest.Controllers
         public async Task CreateAsync_ValidInput_Succeeded()
         {
             var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object, _mockMapper.Object);
+=======
+            var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object);
+            _mockRoleManager.Setup(x => x.Roles).Throws(new Exception());
+            await Assert.ThrowsAnyAsync<Exception>(async () => await rolesController.GetAllAsync());
+        }
+
+        [Fact]
+        public async Task CreateAsync_ValidInput_Succeeded()
+        {
+            var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object);
+>>>>>>> main
             _mockRoleManager.Setup(x => x.CreateAsync(It.IsAny<IdentityRole>())).ReturnsAsync(IdentityResult.Success);
             var result = await rolesController.CreateAsync(new RoleViewModel
             {
@@ -115,7 +160,11 @@ namespace Knowledge.Web.API.UnitTest.Controllers
         [Fact]
         public async Task CreateAsync_ValidInput_Failed()
         {
+<<<<<<< HEAD
             var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object, _mockMapper.Object);
+=======
+            var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object);
+>>>>>>> main
             _mockRoleManager.Setup(x => x.CreateAsync(It.IsAny<IdentityRole>())).ReturnsAsync(IdentityResult.Failed(new IdentityError()));
             var result = await rolesController.CreateAsync(new RoleViewModel
             {
