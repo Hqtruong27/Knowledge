@@ -66,8 +66,7 @@ namespace Knowledge.Web.API
                 options.User.RequireUniqueEmail = true;
 
                 // User Settings.
-                options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.AllowedUserNameCharacters = Constants.CharactersUser;
                 options.User.RequireUniqueEmail = false;
             });
 
