@@ -7,7 +7,6 @@ using Knowledge.Data.EF.Seed;
 using Knowledge.Data.Models;
 using Knowledge.Data.Repositories.RegisterDI;
 using Knowledge.Services.Validation;
-using Knowledge.Web.API.IdentityServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -22,10 +21,7 @@ namespace Knowledge.Web.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -37,54 +33,26 @@ namespace Knowledge.Web.API
             {
                 options.UseSqlServer(Configuration.GetConnectionString(Constants.DbContext));
             }, ServiceLifetime.Scoped, ServiceLifetime.Singleton);
-            services.AddControllersWithViews().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<RoleViewModelValidator>());
-            services.AddRazorPages();
 
-            //2. Setup identity
+            //2. Fluent Validation
+            services.AddControllers().AddFluentValidation(fv =>
+            {
+                fv.RegisterValidatorsFromAssemblyContaining<RoleViewModelValidator>();
+            });
+
+            //3. Setup identity
             services.AddIdentity<User, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
-            //3. Resgiter DI Repository
+            //4. Resgiter DI Repository
             services.AddRepository();
             services.AddTransient<DatabaseInitializer>();
-            //4. Auto Mapper
+
+            //5. Auto Mapper
             services.AddAutoMapper(typeof(MapperProfiles).Assembly);
-            //5. Config Identity Server
-            var builder = services.AddIdentityServer(options =>
-            {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
-            })
-            .AddInMemoryIdentityResources(IdsConfiguration.Ids)
-            .AddInMemoryApiResources(IdsConfiguration.Apis)
-            .AddInMemoryClients(IdsConfiguration.Clients)
-            .AddAspNetIdentity<User>();
 
-            //6. Config Identity options
-            services.Configure<IdentityOptions>(options =>
-            {
-                //Default Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.AllowedForNewUsers = true;
-                options.SignIn.RequireConfirmedPhoneNumber = false;
-                options.SignIn.RequireConfirmedAccount = false;
-                options.SignIn.RequireConfirmedEmail = false;
-                options.Password.RequiredLength = 6;
-                options.Password.RequireDigit = true;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = true;
-                options.User.RequireUniqueEmail = true;
-
-                // User Settings.
-                options.User.AllowedUserNameCharacters = Constants.CharactersUser;
-                options.User.RequireUniqueEmail = false;
-            });
-           
-            //Swagger            
+            //6. Swagger            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Knowledge.Web.API", Version = "v1" });
@@ -97,17 +65,11 @@ namespace Knowledge.Web.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseSwagger();
-                //app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Knowledge.Api v1"));
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Knowledge.Api v1"));
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
-            app.UseIdentityServer();
+
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
             app.UseAuthentication();
@@ -115,9 +77,7 @@ namespace Knowledge.Web.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }

@@ -8,7 +8,7 @@ namespace Knowledge.Web.API.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index1()
         {
             return View();
         }
