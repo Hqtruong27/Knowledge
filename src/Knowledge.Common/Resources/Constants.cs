@@ -8,6 +8,6 @@ namespace Knowledge.Common.Resources
         /// <summary>
         /// Allow UserName Charactes 
         /// </summary>
-        public const string CharactersUser = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+        public const string UnsignedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
     }
 }
