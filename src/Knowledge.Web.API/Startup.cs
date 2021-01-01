@@ -47,7 +47,7 @@ namespace Knowledge.Web.API
 
             //4. Resgiter DI Repository
             services.AddRepository();
-            services.AddTransient<DatabaseInitializer>();
+            //services.AddTransient<DatabaseInitializer>();
 
             //5. Auto Mapper
             services.AddAutoMapper(typeof(MapperProfiles).Assembly);
