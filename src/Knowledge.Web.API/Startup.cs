@@ -7,6 +7,7 @@ using Knowledge.Data.EF.Seed;
 using Knowledge.Data.Models;
 using Knowledge.Data.Repositories.RegisterDI;
 using Knowledge.Services.Validation;
+using Knowledge.Web.API.IdentityServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
 
 namespace Knowledge.Web.API
 {
@@ -49,13 +51,59 @@ namespace Knowledge.Web.API
             services.AddRepository();
             //services.AddTransient<DatabaseInitializer>();
 
+            var builder = services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+            }).AddInMemoryIdentityResources(IdsConfiguration.Ids)
+            .AddInMemoryApiResources(IdsConfiguration.Apis)
+            .AddInMemoryClients(IdsConfiguration.Clients).AddAspNetIdentity<User>();
+
             //5. Auto Mapper
             services.AddAutoMapper(typeof(MapperProfiles).Assembly);
 
+            services.AddAuthentication()
+               .AddLocalApi("Bearer", option =>
+               {
+                   option.ExpectedScope = "api.knowledge";
+               });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Bearer", policy =>
+                {
+                    policy.AddAuthenticationSchemes("Bearer");
+                    policy.RequireAuthenticatedUser();
+                });
+            });
             //6. Swagger            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Knowledge.Web.API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        Implicit = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri("https://localhost:4000/Account/Login/"),
+                            Scopes = new Dictionary<string, string> { { "api.knowledge", "Knowledge API" } }
+                        },
+                    },
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                                Reference  = new OpenApiReference{Type = ReferenceType.SecurityScheme, Id = "Bearer"}
+                        },
+                        new List<string>{ "api.knowledge" }
+                    }
+                });
             });
         }
 
@@ -66,7 +114,11 @@ namespace Knowledge.Web.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Knowledge.Api v1"));
+                app.UseSwaggerUI(c =>
+                {
+                    c.OAuthClientId("swagger");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Knowledge.Api v1");
+                });
             }
 
             app.UseHttpsRedirection();
