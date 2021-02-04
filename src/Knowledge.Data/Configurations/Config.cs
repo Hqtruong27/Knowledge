@@ -1,5 +1,4 @@
 ﻿using Knowledge.Data.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Knowledge.Data.Configurations
@@ -8,10 +7,10 @@ namespace Knowledge.Data.Configurations
     {
         public static void ConfigurationModels(this ModelBuilder builder)
         {
-            builder.Entity<IdentityRole>()
-                  .Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
-            builder.Entity<User>()
-                   .Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
+            //builder.Entity<IdentityRole>()
+            //      .Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
+            //builder.Entity<User>()
+            //       .Property(x => x.Id).HasMaxLength(50).IsUnicode(false);
 
             //Permission
             builder.Entity<Permission>()

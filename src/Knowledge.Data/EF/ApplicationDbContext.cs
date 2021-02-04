@@ -1,23 +1,25 @@
 ﻿using Knowledge.Data.Configurations;
 using Knowledge.Data.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Knowledge.Data.EF
 {
-    public class ApplicationDbContext : IdentityDbContext<User>
+    public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options)
+        public ApplicationDbContext(DbContextOptions options) : base(options) 
         {
+
         }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    base.OnConfiguring(optionsBuilder);
+        //}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
             builder.ConfigurationModels();
         }
-
         public DbSet<ActivityLog> ActivityLogs { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Category> Categories { get; set; }

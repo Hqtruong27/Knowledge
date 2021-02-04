@@ -16,13 +16,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Knowledge.Web.API.UnitTest"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Knowledge.Data", "src\Knowledge.Data\Knowledge.Data.csproj", "{DAAD8FAA-FEBC-4547-AA38-891EAB40DF75}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Knowledge.Services", "src\Knowledge.Services\Knowledge.Services.csproj", "{5B856B32-BDE0-4571-8AF8-BC0C5F69BF3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Knowledge.Infrastructure", "src\Knowledge.Infrastructure\Knowledge.Infrastructure.csproj", "{5B856B32-BDE0-4571-8AF8-BC0C5F69BF3E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Knowledge.Common", "src\Knowledge.Common\Knowledge.Common.csproj", "{7CA51257-AB3C-4B4D-87AD-DF029E1BB305}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Knowledge.Core", "src\Knowledge.Core\Knowledge.Core.csproj", "{01944027-415C-49A6-A618-53CA8C38D7FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Knowledge.Web.Identity", "src\Knowledge.Web.Identity\Knowledge.Web.Identity.csproj", "{D5F96A28-2B90-4E13-92CC-411E512EC7CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Knowledge.Web.IdentityProvider", "src\Knowledge.Web.IdentityProvider\Knowledge.Web.IdentityProvider.csproj", "{D5F96A28-2B90-4E13-92CC-411E512EC7CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,20 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="IocConfig\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Knowledge.Data\Knowledge.Data.csproj" />
-    <ProjectReference Include="..\Knowledge.Services\Knowledge.Services.csproj" />
+    <ProjectReference Include="..\Knowledge.Infrastructure\Knowledge.Infrastructure.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <!--Swagger-->
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <!--JWT-->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1" NoWarn="NU1605" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.1" NoWarn="NU1605" />
   </ItemGroup>
 
+  
 </Project>

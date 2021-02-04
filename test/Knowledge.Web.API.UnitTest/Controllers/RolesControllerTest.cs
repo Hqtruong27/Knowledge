@@ -8,9 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Knowledge.Web.API.Controllers;
 using Knowledge.Data.UOW;
-using Knowledge.Services.ViewModels;
 using AutoMapper;
 using MockQueryable.Moq;
+using Knowledge.Services.Models.Request;
+using Knowledge.Services.Models;
 
 namespace Knowledge.Web.API.UnitTest.Controllers
 {
@@ -50,7 +51,7 @@ namespace Knowledge.Web.API.UnitTest.Controllers
 
             var result = await rolesController.GetAllAsync();
             var okResult = (OkObjectResult)result;
-            Assert.True((okResult.Value as IEnumerable<RoleViewModel>).Any());
+            Assert.True((okResult.Value as IEnumerable<RoleRequest>).Any());
         }
 
         [Fact]
@@ -71,7 +72,7 @@ namespace Knowledge.Web.API.UnitTest.Controllers
 
             var result = await rolesController.GetPagination(null, 1, 2);
             var okResult = (OkObjectResult)result;
-            var paging = okResult.Value as Pagination<RoleViewModel>;
+            var paging = okResult.Value as Pagination<RoleRequest>;
 
             Assert.Equal(4, paging.TotalRecords);
             Assert.Single(paging.Items);
@@ -85,7 +86,7 @@ namespace Knowledge.Web.API.UnitTest.Controllers
 
             var result = await rolesController.GetPagination("admin", 1, 2);
             var okResult = (OkObjectResult)result;
-            var paging = okResult.Value as Pagination<RoleViewModel>;
+            var paging = okResult.Value as Pagination<RoleRequest>;
 
             Assert.Equal(1, paging.TotalRecords);
             Assert.Single(paging.Items);
@@ -104,7 +105,7 @@ namespace Knowledge.Web.API.UnitTest.Controllers
         {
             var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object, _mockMapper.Object);
             _mockRoleManager.Setup(x => x.CreateAsync(It.IsAny<IdentityRole>())).ReturnsAsync(IdentityResult.Success);
-            var result = await rolesController.CreateAsync(new RoleViewModel
+            var result = await rolesController.CreateAsync(new RoleRequest
             {
                 Id = "Admin",
                 Name = "Admin",
@@ -117,7 +118,7 @@ namespace Knowledge.Web.API.UnitTest.Controllers
         {
             var rolesController = new RolesController(_mockRoleManager.Object, _mockUnitOfWork.Object, _mockMapper.Object);
             _mockRoleManager.Setup(x => x.CreateAsync(It.IsAny<IdentityRole>())).ReturnsAsync(IdentityResult.Failed(new IdentityError()));
-            var result = await rolesController.CreateAsync(new RoleViewModel
+            var result = await rolesController.CreateAsync(new RoleRequest
             {
                 Id = "Admin",
                 Name = "Admin",

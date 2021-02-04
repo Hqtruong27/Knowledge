@@ -20,18 +20,16 @@
 		
 		<!--Serilog-->
 		<PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
+		<PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
 		<!--Swagger-->
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Knowledge.Common\Knowledge.Common.csproj" />
 		<ProjectReference Include="..\Knowledge.Core\Knowledge.Core.csproj" />
-		<ProjectReference Include="..\Knowledge.Data\Knowledge.Data.csproj" />
-		<ProjectReference Include="..\Knowledge.Services\Knowledge.Services.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Controllers\" />
+	  <Folder Include="Logs\" />
 	</ItemGroup>
 </Project>

@@ -16,7 +16,6 @@ namespace Knowledge.Data.Models
         [MaxLength(50)]
         [Column(TypeName = "varchar(50)")]
         public string CommandId { get; set; }
-
         public Permission(string functionId, string roleId, string commandId)
         {
             FunctionId = functionId;
