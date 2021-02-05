@@ -56,14 +56,12 @@ namespace Knowledge.Common.Helper
             var stream = new MemoryStream();
             if (input is null || input.ToString() == Empty) return Empty;
             var serializer = JsonSerializer.Serialize(input);
-            return serializer.Replace('"', '\'')[0x1..^1];
+            return serializer.Replace('"', '\'')[1..^1];
         }
 
         /// <summary>
-        /// Convert Object To Json Async
+        /// Convert To jsonAsync
         /// </summary>
-        /// var y = serializer[1..^1]; //cut string length -1
-        /// var jsonModify = string.Join("'", serializer.Split('"'));//join " ' "
         public static async Task ToJsonStringAsync(this object input)
         {
             if (input is null || input.ToString() == Empty) return;
