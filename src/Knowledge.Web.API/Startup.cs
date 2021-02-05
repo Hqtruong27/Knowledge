@@ -30,8 +30,8 @@ namespace Knowledge.Web.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

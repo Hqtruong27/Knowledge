@@ -1,5 +1,10 @@
+using AutoMapper;
+using Knowledge.Web.IdentityProvider.Bussiness.Mapper;
+using Knowledge.Web.IdentityProvider.Common;
+using Knowledge.Web.IdentityProvider.Data.EF;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +28,9 @@ namespace Knowledge.Web.IdentityProvider
             //services.AddDbContextFactory(Configuration);
             //2. Razer Page, Mvc
             services.AddControllersWithViews();
+            services.AddAutoMapper(typeof(MapperProfiles).Assembly);
+            //services.AddDbContext<IdentityProviderDbContext>(options => 
+            //    options.UseSqlServer(Configuration.GetConnectionString(Constants.IdentityContext)));
 
             services.AddAuthentication();
 

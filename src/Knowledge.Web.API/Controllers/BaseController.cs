@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Knowledge.Infrastructure.Models.Response.Base;
+﻿using static System.Net.HttpStatusCode;
+using Microsoft.AspNetCore.Mvc;
+using Knowledge.Infrastructure.Models.Response;
 using System.Net;
-using static System.Net.HttpStatusCode;
 using Knowledge.Common.Helper;
 
 namespace Knowledge.Web.API.Controllers
@@ -13,7 +13,7 @@ namespace Knowledge.Web.API.Controllers
     public class BaseController : ControllerBase
     {
         [NonAction]
-        public virtual OkObjectResult Ok(object value = null, string url = null)
+        public virtual OkObjectResult Succeeded(object value = null, string url = null)
         {
             if (value is null)
             {

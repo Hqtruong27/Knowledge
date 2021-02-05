@@ -8,6 +8,9 @@ namespace Knowledge.Web.IdentityProvider.Common
 {
     public static class Constants
     {
-        public const string Dbcontext = "IdentityProviderDbContext";
+        public const string IdentityContext = "IdentityProviderDbContext";
+
+        public const string UnsignedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+
     }
 }

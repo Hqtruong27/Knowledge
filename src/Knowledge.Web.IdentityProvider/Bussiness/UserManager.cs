@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Knowledge.Common.Helper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,6 +7,7 @@ using System.Threading.Tasks;
 using Knowledge.Web.IdentityProvider.Models;
 using Knowledge.Web.IdentityProvider.Data;
 using Knowledge.Web.IdentityProvider.Data.EF;
+using Knowledge.Web.IdentityProvider.Common;
 
 namespace Knowledge.Web.IdentityProvider.Bussiness
 {

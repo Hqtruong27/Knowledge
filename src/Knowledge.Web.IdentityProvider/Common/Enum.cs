@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Knowledge.Common.Enums
+namespace Knowledge.Web.IdentityProvider.Common
 {
     public enum UserErr
     {

@@ -1,6 +1,5 @@
-﻿using static Knowledge.Common.Enums.UserErr;
-using static System.Net.HttpStatusCode;
-using Knowledge.Common.Helper;
+﻿using static System.Net.HttpStatusCode;
+using static Knowledge.Web.IdentityProvider.Common.UserErr;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,6 +12,7 @@ using Knowledge.Web.IdentityProvider.Controllers;
 using Knowledge.Web.IdentityProvider.Data;
 using Knowledge.Web.IdentityProvider.Bussiness;
 using Knowledge.Web.IdentityProvider.Models;
+using Knowledge.Web.IdentityProvider.Common;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,7 +33,6 @@ namespace Knowledge.Web.API.Controllers
 
         // GET: api/<UsersController>/users
         [HttpGet("users")]
-        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             _logger.LogWarning("This is Warning");
@@ -47,10 +46,10 @@ namespace Knowledge.Web.API.Controllers
 
             }
             var users = await UserManager.GetsAsync();
-            var x = new { Id = "xxxx", Name = "yyyy", Price = "zzz" };
+            //var x = new { Id = "xxxx", Name = "yyyy", Price = "zzz" };
             //Log.Information("xCreated {@User} on {Created}", x, DateTime.Now);
             _logger.LogInformation("Created {@User} on {Created}", users, DateTime.Now);
-            return (users.Count() >= 0 || users != null) ? Ok(users) : NotFound(GETS404.GetName());
+            return await users.AnyAsync() ? Ok(users) : NotFound(GETS404.GetName());
         }
 
         // GET api/<UsersController>/user/id

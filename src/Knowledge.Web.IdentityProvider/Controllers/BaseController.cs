@@ -12,7 +12,7 @@ namespace Knowledge.Web.IdentityProvider.Controllers
     public class BaseController : ControllerBase
     {
         [NonAction]
-        public virtual OkObjectResult Ok(object value = null, string url = null)
+        public virtual OkObjectResult Succeeded(object value = null, string url = null)
         {
             if (value is null)
             {

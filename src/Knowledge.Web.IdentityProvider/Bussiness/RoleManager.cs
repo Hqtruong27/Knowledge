@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Knowledge.Common.Helper;
+using Knowledge.Web.IdentityProvider.Common;
 using Knowledge.Web.IdentityProvider.Data.EF;
 using Knowledge.Web.IdentityProvider.Models;
 using Microsoft.AspNetCore.Identity;

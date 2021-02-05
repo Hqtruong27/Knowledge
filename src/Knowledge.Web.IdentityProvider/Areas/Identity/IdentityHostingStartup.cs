@@ -11,10 +11,11 @@ using Knowledge.Web.IdentityProvider.Bussiness.Validation;
 using Knowledge.Web.IdentityProvider.Bussiness;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Knowledge.Common.Resources;
+using Knowledge.Web.IdentityProvider.Common;
+using Knowledge.Web.IdentityProvider.Areas.Identity;
 
-[assembly: HostingStartup(typeof(Knowledge.Web.Identity.Areas.Identity.IdentityHostingStartup))]
-namespace Knowledge.Web.Identity.Areas.Identity
+[assembly: HostingStartup(typeof(IdentityHostingStartup))]
+namespace Knowledge.Web.IdentityProvider.Areas.Identity
 {
     public class IdentityHostingStartup : IHostingStartup
     {
@@ -23,9 +24,8 @@ namespace Knowledge.Web.Identity.Areas.Identity
             builder.ConfigureServices((context, services) =>
             {
                 //1. DbContext
-                services.AddDbContext<IdentityProviderDbContext>(options => {
-                    options.UseSqlServer(context.Configuration.GetConnectionString(Constants.IdentityContext));
-                });
+                services.AddDbContext<IdentityProviderDbContext>(options =>
+                 options.UseSqlServer(context.Configuration.GetConnectionString(Constants.IdentityContext)));
 
                 //2. Fluent Validation
                 services.AddControllers(/*c => c.Filters.Add(new AuthorizeFilter())*/)
@@ -53,7 +53,7 @@ namespace Knowledge.Web.Identity.Areas.Identity
                         .AddInMemoryApiResources(context.Configuration.GetSection("IdentityServer:ApiResources"))
                         .AddInMemoryClients(context.Configuration.GetSection("IdentityServer:Clients"))
                         .AddDeveloperSigningCredential()
-                        .AddAspNetIdentity<User>();                             
+                        .AddAspNetIdentity<User>();
 
                 //4. Config Identity options
                 services.Configure<IdentityOptions>(options =>
