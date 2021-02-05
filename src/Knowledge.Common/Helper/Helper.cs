@@ -51,7 +51,7 @@ namespace Knowledge.Common.Helper
         /// </summary>
         /// var y = serializer[1..^1]; //cut string length -1
         /// var jsonModify = string.Join("'", serializer.Split('"'));//join " ' "
-        public static string JsonSerialize(this object input)
+        public static string Serializer(this object input)
         {
             var stream = new MemoryStream();
             if (input is null || input.ToString() == Empty) return Empty;

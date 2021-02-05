@@ -29,12 +29,12 @@ namespace Knowledge.Web.IdentityProvider.Bussiness
                 var result = await _roleManager.CreateAsync(role);
                 if (result.Succeeded)
                     return await Task.FromResult(_mapper.Map<RoleResponse>(result));
-                throw new Exception($"Cannot create role: {request.JsonSerialize()}");
+                throw new Exception($"Cannot create role: {request.Serializer()}");
             }
             catch (Exception ex)
             {
                 await Task.FromException(ex);
-                throw new Exception($"Cannot create role: {request.JsonSerialize()}", ex);
+                throw new Exception($"Cannot create role: {request.Serializer()}", ex);
             }
         }
         public async Task<Pagination> GetPaginationAsync(string q, int offset, int limit)
@@ -42,7 +42,7 @@ namespace Knowledge.Web.IdentityProvider.Bussiness
             q = q.Trim().ToLower();
             var result = await _context.Roles.Where(r => string.IsNullOrWhiteSpace(q) || r.Id.ToLower().Contains(q) || r.Name.ToLower().Contains(q)).AsNoTracking().ToArrayAsync();
             var items = result.Skip((offset - 1) * limit).Take(offset).Select(item => _mapper.Map<RoleResponse>(item));
-            var pagination = new Pagination() { Items = items.JsonSerialize(), TotalRecords = result.Length };
+            var pagination = new Pagination() { Items = items.Serializer(), TotalRecords = result.Length };
             return pagination;
         }
         public async Task DeleteAsync(string id)
@@ -87,12 +87,12 @@ namespace Knowledge.Web.IdentityProvider.Bussiness
                 var result = await _roleManager.UpdateAsync(role);
                 if (result.Succeeded)
                     return _mapper.Map<RoleResponse>(result);
-                throw new Exception($"Cannot update role: {request.JsonSerialize()}");
+                throw new Exception($"Cannot update role: {request.Serializer()}");
             }
             catch (Exception ex)
             {
                 await Task.FromException(ex);
-                throw new Exception($"Cannot update role: {request.JsonSerialize()}", ex);
+                throw new Exception($"Cannot update role: {request.Serializer()}", ex);
             }
         }
     }

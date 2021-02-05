@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Knowledge.Web.API\Knowledge.Web.API.csproj" />
+    <ProjectReference Include="..\..\src\Knowledge.Web.IdentityProvider\Knowledge.Web.IdentityProvider.csproj" />
   </ItemGroup>
 
 </Project>
