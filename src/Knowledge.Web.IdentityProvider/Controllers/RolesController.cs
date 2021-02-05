@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using static System.Net.HttpStatusCode;
+using Microsoft.AspNetCore.Mvc;
 using System;
-using static System.Net.HttpStatusCode;
 using System.Threading.Tasks;
 using Knowledge.Web.IdentityProvider.Bussiness;
 using Knowledge.Web.IdentityProvider.Models;

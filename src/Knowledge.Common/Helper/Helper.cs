@@ -51,13 +51,30 @@ namespace Knowledge.Common.Helper
         /// </summary>
         /// var y = serializer[1..^1]; //cut string length -1
         /// var jsonModify = string.Join("'", serializer.Split('"'));//join " ' "
-        public static string Serializer(this object input)
+        public static string ToJsonString(this object input)
         {
             var stream = new MemoryStream();
             if (input is null || input.ToString() == Empty) return Empty;
             var serializer = JsonSerializer.Serialize(input);
             return serializer.Replace('"', '\'')[0x1..^1];
         }
+
+        /// <summary>
+        /// Convert Object To Json Async
+        /// </summary>
+        /// var y = serializer[1..^1]; //cut string length -1
+        /// var jsonModify = string.Join("'", serializer.Split('"'));//join " ' "
+        public static async Task ToJsonStringAsync(this object input)
+        {
+            if (input is null || input.ToString() == Empty) return;
+            using var stream = new MemoryStream();
+            await JsonSerializer.SerializeAsync(stream, input, input.GetType());
+            //stream.Position = 0;
+            //using var reader = new StreamReader(stream);
+            //var json = await reader.ReadToEndAsync();
+            //return json.Replace('"', '\'')[0x1..^1];
+        }
+
         /// <summary>
         /// [DisplayName(Name ="Get display name Enum")]
         /// </summary>

@@ -53,7 +53,7 @@ namespace Knowledge.Web.IdentityProvider.Bussiness
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                     return _mapper.Map<UserResponse>(user);
-                throw new Exception($"Faild to Create User: {user.Serializer()}");
+                throw new Exception($"Faild to Create User: {user.ToJsonString()}");
             }
             catch (Exception ex)
             {
